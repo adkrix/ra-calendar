@@ -1,0 +1,1 @@
+node ./node_modules/http-server/bin/http-server ./dist/ -a 127.0.0.1 -p 8080

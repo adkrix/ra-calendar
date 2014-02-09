@@ -1,0 +1,20 @@
+{
+  "name": "ra-calendar",
+  "version": "0.0.1",
+  "author": "Arthur Creek <arthur.creek@gmail.com>",
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "~0.6.1",
+    "grunt": "~0.4.1",
+    "grunt-contrib-sass": "~0.7.2",
+    "grunt-contrib-coffee": "~0.9.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.3.2",
+    "grunt-contrib-jade": "~0.9.1",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-watch": "~0.5.2"
+  },
+  "engines": {
+    "node": ">=0.4.1"
+  }
+}
