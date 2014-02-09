@@ -1,5 +1,6 @@
 $ ->
   settings =
+    date: "2014/02/08"
     config:
       events:
         id: "id"
@@ -11,8 +12,7 @@ $ ->
       resources:
         id: "id"
         title: "name"
-    handlers:
-      parse: (date) -> Date.parse(date)
+    parseDate: (date) -> Date.parse(date)
     events: [
       id: 1
       channel_id: 1
@@ -23,7 +23,7 @@ $ ->
       id: 2
       channel_id: 1
       name: "My first event"
-      time: "2014-02-08 09:00:00"
+      time: "2014-02-08 19:00:00"
       duration: 3600
     ]
     resources: [

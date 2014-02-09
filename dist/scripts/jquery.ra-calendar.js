@@ -6,11 +6,20 @@ $(function() {
 'use strict';
 
 
-// Source: dist/scripts/lib/init.js
+// Source: dist/scripts/lib/base.js
 $.RaCalendar = {
   version: '0.0.1',
+  elements: {
+    root: null,
+    header: null,
+    resources: null,
+    content: null
+  },
   config: {
-    default_duration: 3600,
+    defaults: {
+      begin_time: "09:00:00",
+      duration: 3600
+    },
     date_round: '15m',
     events: {
       id: "id",
@@ -26,58 +35,30 @@ $.RaCalendar = {
     }
   },
   events: [],
-  resources: [],
-  resource: {
+  resorces: [],
+  default_color: {
     color: '#000000',
     background: '#eeeeee'
   }
 };
-
-$.fn.RaCalendar = function(settings) {
-  return $(this).each(function() {
-    var $C, $ELEM, $H, $M, $ROOT, $TMPL, list;
-    $ELEM = $(this);
-    $ROOT = $.RaCalendar;
-    $C = $ROOT.config;
-    if (settings.config) {
-      $.extend(true, $C, settings.config);
-    }
-    $H = $ROOT.handlers;
-    if (settings.handlers) {
-      $.extend(true, $H, settings.handlers);
-    }
-    $TMPL = $ROOT.template;
-    if (settings.template) {
-      $.extend(true, $TMPL, settings.template);
-    }
-    $M = $ROOT.methods;
-    if (settings.events) {
-      $M.updateEvents(settings.events);
-    } else {
-      $ROOT.events = [];
-    }
-    if (settings.resources) {
-      $M.updateResources(settings.resources);
-    } else {
-      $ROOT.resources = [];
-    }
-    list = "";
-    $.each($ROOT.events, function(i, n) {
-      return list += n.url ? $H.nano($TMPL.li_link, n) : $H.nano($TMPL.li_div, n);
-    });
-    return $ELEM.html($H.nano($TMPL.ul, {
-      list: list
-    }));
-  });
-};
 ;;
-// Source: dist/scripts/lib/handlers.js
-$.RaCalendar.handlers = {
-  parseDate: function(date) {
-    return Date.parse(date);
-  },
-  formatDate: function(date, format) {
-    return DateFormat.format.date(date, format);
+// Source: dist/scripts/lib/methods.js
+$.RaCalendar.methods = {
+  tmpl: function(template, data) {
+    return template.replace(/\{([\w\.]*)\}/g, function(str, key) {
+      var keys, v, _i, _len;
+      keys = key.split(".");
+      v = data[keys.shift()];
+      for (_i = 0, _len = keys.length; _i < _len; _i++) {
+        key = keys[_i];
+        v = v[key];
+      }
+      if (typeof v !== "undefined" && v !== null) {
+        return v;
+      } else {
+        return "";
+      }
+    });
   },
   roundDate: function(date, discrete) {
     discrete = (function() {
@@ -98,26 +79,6 @@ $.RaCalendar.handlers = {
     })();
     return Math.floor(+date / discrete) * discrete;
   },
-  nano: function(template, data) {
-    return template.replace(/\{([\w\.]*)\}/g, function(str, key) {
-      var keys, v, _i, _len;
-      keys = key.split(".");
-      v = data[keys.shift()];
-      for (_i = 0, _len = keys.length; _i < _len; _i++) {
-        key = keys[_i];
-        v = v[key];
-      }
-      if (typeof v !== "undefined" && v !== null) {
-        return v;
-      } else {
-        return "";
-      }
-    });
-  }
-};
-;;
-// Source: dist/scripts/lib/methods.js
-$.RaCalendar.methods = {
   normalizeEvents: function(event) {
     var H, R;
     R = $.RaCalendar.config.events;
@@ -132,11 +93,105 @@ $.RaCalendar.methods = {
   }
 };
 ;;
+// Source: dist/scripts/lib/methods-date.js
+$.RaCalendar.methods.date = {
+  clone: function(date) {
+    return new Date(date.getTime());
+  },
+  parse: function(date) {
+    return new Date(Date.parse(date));
+  },
+  format: function(date, format) {
+    return DateFormat.format.date(date, format);
+  },
+  reformat: function(date, format) {
+    return this.format(this.parseDate(date), format);
+  },
+  isLeapYear: function(year) {
+    return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+  },
+  getDaysInMonth: function(year, month) {
+    var _ref;
+    return [
+      31, (_ref = this.isLeapYear(year)) != null ? _ref : {
+        29: 28
+      }, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+    ][month];
+  },
+  normalize: function(date) {
+    if (date) {
+      if (typeof date === 'object') {
+        return date;
+      } else {
+        return this.parse(date);
+      }
+    } else {
+      return $.now();
+    }
+  },
+  update: function(date, duration) {
+    return new Date(date.setSeconds(duration));
+  }
+};
+;;
 // Source: dist/scripts/lib/templates.js
 $.RaCalendar.template = {
+  header: {
+    main: "<div class='rac-header'>header</div>"
+  },
+  resources: {
+    main: "<div class='rac-resources'>resources</div>"
+  },
+  content: {
+    main: "<div class='rac-content'>c</div>"
+  },
   ul: "<ul>{list}</ul>",
   li_link: "<li><a href='{url}'>{title}</a></li>",
   li_div: "<li><div>{title}</div> </li>"
+};
+;;
+// Source: dist/scripts/lib/init.js
+$.fn.RaCalendar = function(settings) {
+  return $(this).each(function() {
+    var $BASE, $CONF, $ELEM, $FUNC, $TMPL, list;
+    $BASE = $.extend(true, {}, $.RaCalendar);
+    $ELEM = $BASE.elements;
+    $ELEM.root = $(this).empty();
+    $CONF = $BASE.config;
+    if (settings.config) {
+      $.extend(true, $CONF, settings.config);
+    }
+    $TMPL = $BASE.template;
+    if (settings.template) {
+      $.extend(true, $TMPL, settings.template);
+    }
+    $FUNC = $BASE.methods;
+    if (settings.parseDate) {
+      $FUNC.date.parse = settings.parseDate;
+    }
+    if (settings.formatDate) {
+      $FUNC.date.format = settings.formatDate;
+    }
+    $BASE.date = $FUNC.date.normalize(settings.date);
+    $BASE.events = settings.events ? $FUNC.updateEvents(settings.events) : [];
+    $BASE.resources = settings.resources ? $FUNC.updateResources(settings.resources) : [];
+    $ELEM.header = $($TMPL.header.main).appendTo($ELEM.root);
+    $ELEM.resources = $($TMPL.resources.main).appendTo($ELEM.root);
+    $ELEM.content = $($TMPL.content.main).appendTo($ELEM.root);
+    list = "";
+    $.each($BASE.events, function(i, n) {
+      return list += n.url ? $FUNC.tmpl($TMPL.li_link, n) : $FUNC.tmpl($TMPL.li_div, n);
+    });
+    $.each($BASE.events, function(i, n) {
+      return list += n.url ? $FUNC.tmpl($TMPL.li_link, n) : $FUNC.tmpl($TMPL.li_div, n);
+    });
+    $.each($BASE.events, function(i, n) {
+      return list += n.url ? $FUNC.tmpl($TMPL.li_link, n) : $FUNC.tmpl($TMPL.li_div, n);
+    });
+    return $ELEM.content.html($FUNC.tmpl($TMPL.ul, {
+      list: list
+    }));
+  });
 };
 
 });

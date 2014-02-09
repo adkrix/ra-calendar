@@ -1,0 +1,46 @@
+nav.navbar.navbar-default(role='navigation')
+  .container
+    .navbar-header
+      button.navbar-toggle(type='button', data-toggle='collapse', data-target='#ra-calendar-example-menu')
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand.logo(href='#') Ra Calendar
+    #ra-calendar-example-menu.collapse.navbar-collapse
+      ul.nav.navbar-nav
+        li
+          a(href='https://github.com/arthur-creek/ra-calendar/archive/master.zip', target='_blank')
+            i.fa.fa-download
+            | Download
+        li
+          a(href='https://github.com/arthur-creek/ra-calendar', target='_blank')
+            i.fa.fa-github
+            | Project on GitHub
+        li.dropdown
+          a.dropdown-toggle(href='#', data-toggle='dropdown')
+            i.fa.fa-file-text
+            | Documentation
+            b.caret
+          ul.dropdown-menu
+            li
+              a(href='#get-started')
+                i.fa.fa-angle-double-right
+                | Get Started
+      ul.nav.navbar-nav.navbar-right
+        li.dropdown
+          a.dropdown-toggle(href='#', data-toggle='dropdown')
+            | Contacts
+            b.caret
+          ul.dropdown-menu
+            li: a(href='https://github.com/arthur-creek/ra-calendar/issues', target='_blank')
+              i.fa.fa-exclamation-circle
+              | Add Issue
+            li.divider
+            li: a(href='http://stackoverflow.com/users/2488639/arthur-d-creek', target='_blank')
+              i.fa.fa-stack-overflow
+              | Stack Overflow
+            li.divider
+            li: a(href='mailto:arthur.creek@gmail.com', target='_blank')
+              i.fa.fa-envelope
+              | Email

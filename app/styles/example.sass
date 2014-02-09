@@ -1,5 +1,42 @@
+@import 'compass/css3'
+
+$color-nav: #FAC53A
+$color-header: #C13C1B
+$color-footer: #002255
+
 .logo
-  background: url(../images/logo.png) 10px center no-repeat
+  background: url(../images/logo.png) 15px center no-repeat
   height: 50px
-  width: 200px
-  padding-left: 75px
+  width: 240px
+  padding-left: 85px
+
+.navbar-default
+  background: $color-nav
+  margin: 0
+  border: 0
+  +border-radius(0)
+  .navbar-brand, .navbar-nav > li > a
+    color: #000000
+
+.navbar-default .navbar-nav > .open
+  > a, > a:hover, > a:focus
+    color: #333
+    background-color: darken($color-nav, 5%)
+
+.nav
+  .fa
+    margin-right: 8px
+
+header
+  background: $color-header
+  color: #ffffff
+  margin-bottom: 20px
+  padding: 15px
+
+.content
+  min-height: 420px
+
+footer
+  background: $color-footer
+  color: #ffffff
+  padding: 15px

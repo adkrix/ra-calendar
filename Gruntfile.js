@@ -22,10 +22,11 @@ module.exports = function(grunt) {
           bare: true
         },
         files: {
-          'dist/scripts/lib/init.js': ['app/scripts/init.coffee'],
-          'dist/scripts/lib/handlers.js': ['app/scripts/handlers.coffee'],
+          'dist/scripts/lib/base.js': ['app/scripts/base.coffee'],
           'dist/scripts/lib/methods.js': ['app/scripts/methods.coffee'],
+          'dist/scripts/lib/methods-date.js': ['app/scripts/methods-date.coffee'],
           'dist/scripts/lib/templates.js': ['app/scripts/templates.coffee'],
+          'dist/scripts/lib/init.js': ['app/scripts/init.coffee'],
           'dist/example.js': ['app/example.coffee']
         }
       }
@@ -55,10 +56,11 @@ module.exports = function(grunt) {
           }
         },
         src: [
-          'dist/scripts/lib/init.js',
-          'dist/scripts/lib/handlers.js',
+          'dist/scripts/lib/base.js',
           'dist/scripts/lib/methods.js',
-          'dist/scripts/lib/templates.js'
+          'dist/scripts/lib/methods-date.js',
+          'dist/scripts/lib/templates.js',
+          'dist/scripts/lib/init.js'
         ],
         dest: 'dist/scripts/jquery.<%= meta.name %>.js'
       }

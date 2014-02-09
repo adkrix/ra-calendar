@@ -1,5 +1,38 @@
 .logo {
-  background: url(../images/logo.png) 10px center no-repeat;
+  background: url(../images/logo.png) 15px center no-repeat;
   height: 50px;
-  width: 200px;
-  padding-left: 75px; }
+  width: 240px;
+  padding-left: 85px; }
+
+.navbar-default {
+  background: #fac53a;
+  margin: 0;
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0; }
+  .navbar-default .navbar-brand, .navbar-default .navbar-nav > li > a {
+    color: black; }
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #333333;
+  background-color: #f9be21; }
+
+.nav .fa {
+  margin-right: 8px; }
+
+header {
+  background: #c13c1b;
+  color: white;
+  margin-bottom: 20px;
+  padding: 15px; }
+
+.content {
+  min-height: 420px; }
+
+footer {
+  background: #002255;
+  color: white;
+  padding: 15px; }

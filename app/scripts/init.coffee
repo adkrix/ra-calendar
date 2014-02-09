@@ -1,63 +1,65 @@
-$.RaCalendar =
-  version: '<%= meta.version %>'
-  config:
-    default_duration: 3600
-    date_round: '15m'
-    events:
-      id: "id"
-      resource_id: "resource_id"
-      title: "name"
-      begin: "begin"
-      end: "end"
-      duration: ""
-    resources:
-      id: ""
-      title: "name"
-  events: []
-  resources:[]
-  resource:
-    color: '#000000'
-    background: '#eeeeee'
-
-
 $.fn.RaCalendar = (settings) ->
   $(@).each ()->
-    # root element
-    $ELEM = $(@)
+    $BASE = $.extend(true, {}, $.RaCalendar)
 
-    # root of global configuration
-    $ROOT = $.RaCalendar
+    # elements object
+    $ELEM = $BASE.elements
+    $ELEM.root = $(@).empty()
 
     # actual config
-    $C = $ROOT.config
-    $.extend(true, $C, settings.config) if settings.config
+    $CONF = $BASE.config
+    $.extend(true, $CONF, settings.config) if settings.config
 
-    # actrual handlers like $H.parse
-    $H = $ROOT.handlers
-    $.extend(true, $H, settings.handlers) if settings.handlers
 
-    $TMPL = $ROOT.template
+    $TMPL = $BASE.template
     $.extend(true, $TMPL, settings.template) if settings.template
 
-    $M = $ROOT.methods
-    if settings.events
-      $M.updateEvents(settings.events)
-    else
-      $ROOT.events = []
+    $FUNC = $BASE.methods
 
-    if settings.resources
-      $M.updateResources(settings.resources)
-    else
-      $ROOT.resources = []
+    # custom handlers for parsing and formating of date
+    $FUNC.date.parse = settings.parseDate if settings.parseDate
+    $FUNC.date.format = settings.formatDate if settings.formatDate
+
+
+    $BASE.date = $FUNC.date.normalize(settings.date)
+
+    $BASE.events =
+      if settings.events
+        $FUNC.updateEvents(settings.events)
+      else
+        []
+
+    $BASE.resources =
+      if settings.resources
+        $FUNC.updateResources(settings.resources)
+      else
+        []
+
+    $ELEM.header = $($TMPL.header.main).appendTo($ELEM.root)
+    $ELEM.resources = $($TMPL.resources.main).appendTo($ELEM.root)
+    $ELEM.content = $($TMPL.content.main).appendTo($ELEM.root)
 
     list = ""
-    $.each $ROOT.events, (i, n)->
-      list += if n.url
-        $H.nano($TMPL.li_link, n)
-      else
-        $H.nano($TMPL.li_div, n)
+    $.each $BASE.events, (i, n)->
+      list +=
+        if n.url
+          $FUNC.tmpl($TMPL.li_link, n)
+        else
+          $FUNC.tmpl($TMPL.li_div, n)
+    $.each $BASE.events, (i, n)->
+      list +=
+        if n.url
+          $FUNC.tmpl($TMPL.li_link, n)
+        else
+          $FUNC.tmpl($TMPL.li_div, n)
+    $.each $BASE.events, (i, n)->
+      list +=
+        if n.url
+          $FUNC.tmpl($TMPL.li_link, n)
+        else
+          $FUNC.tmpl($TMPL.li_div, n)
 
-    $ELEM.html($H.nano($TMPL.ul,{list: list}))
+    $ELEM.content.html($FUNC.tmpl($TMPL.ul,{list: list}))
 
 
 

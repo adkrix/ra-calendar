@@ -1,62 +1,41 @@
-$.RaCalendar = {
-  version: '0.0.1',
-  config: {
-    default_duration: 3600,
-    date_round: '15m',
-    events: {
-      id: "id",
-      resource_id: "resource_id",
-      title: "name",
-      begin: "begin",
-      end: "end",
-      duration: ""
-    },
-    resources: {
-      id: "",
-      title: "name"
-    }
-  },
-  events: [],
-  resources: [],
-  resource: {
-    color: '#000000',
-    background: '#eeeeee'
-  }
-};
-
 $.fn.RaCalendar = function(settings) {
   return $(this).each(function() {
-    var $C, $ELEM, $H, $M, $ROOT, $TMPL, list;
-    $ELEM = $(this);
-    $ROOT = $.RaCalendar;
-    $C = $ROOT.config;
+    var $BASE, $CONF, $ELEM, $FUNC, $TMPL, list;
+    $BASE = $.extend(true, {}, $.RaCalendar);
+    $ELEM = $BASE.elements;
+    $ELEM.root = $(this).empty();
+    $CONF = $BASE.config;
     if (settings.config) {
-      $.extend(true, $C, settings.config);
+      $.extend(true, $CONF, settings.config);
     }
-    $H = $ROOT.handlers;
-    if (settings.handlers) {
-      $.extend(true, $H, settings.handlers);
-    }
-    $TMPL = $ROOT.template;
+    $TMPL = $BASE.template;
     if (settings.template) {
       $.extend(true, $TMPL, settings.template);
     }
-    $M = $ROOT.methods;
-    if (settings.events) {
-      $M.updateEvents(settings.events);
-    } else {
-      $ROOT.events = [];
+    $FUNC = $BASE.methods;
+    if (settings.parseDate) {
+      $FUNC.date.parse = settings.parseDate;
     }
-    if (settings.resources) {
-      $M.updateResources(settings.resources);
-    } else {
-      $ROOT.resources = [];
+    if (settings.formatDate) {
+      $FUNC.date.format = settings.formatDate;
     }
+    $BASE.date = $FUNC.date.normalize(settings.date);
+    $BASE.events = settings.events ? $FUNC.updateEvents(settings.events) : [];
+    $BASE.resources = settings.resources ? $FUNC.updateResources(settings.resources) : [];
+    $ELEM.header = $($TMPL.header.main).appendTo($ELEM.root);
+    $ELEM.resources = $($TMPL.resources.main).appendTo($ELEM.root);
+    $ELEM.content = $($TMPL.content.main).appendTo($ELEM.root);
     list = "";
-    $.each($ROOT.events, function(i, n) {
-      return list += n.url ? $H.nano($TMPL.li_link, n) : $H.nano($TMPL.li_div, n);
+    $.each($BASE.events, function(i, n) {
+      return list += n.url ? $FUNC.tmpl($TMPL.li_link, n) : $FUNC.tmpl($TMPL.li_div, n);
     });
-    return $ELEM.html($H.nano($TMPL.ul, {
+    $.each($BASE.events, function(i, n) {
+      return list += n.url ? $FUNC.tmpl($TMPL.li_link, n) : $FUNC.tmpl($TMPL.li_div, n);
+    });
+    $.each($BASE.events, function(i, n) {
+      return list += n.url ? $FUNC.tmpl($TMPL.li_link, n) : $FUNC.tmpl($TMPL.li_div, n);
+    });
+    return $ELEM.content.html($FUNC.tmpl($TMPL.ul, {
       list: list
     }));
   });

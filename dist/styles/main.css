@@ -1,4 +1,14 @@
-* {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
+.rac-root {
+  display: block; }
+
+.rac-header {
+  background: #ffcaca;
+  padding: 5px; }
+
+.rac-resources {
+  background: #c2ccd1;
+  padding: 5px; }
+
+.rac-content {
+  padding: 5;
+  background: #c6e746; }
