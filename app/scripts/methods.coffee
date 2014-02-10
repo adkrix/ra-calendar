@@ -9,26 +9,34 @@ $.RaCalendar.methods =
         v = v[key]
       if typeof v != "undefined" and v != null then v else ""
 
+  normalizeEvent: (event, i, a) ->
+    conf = @.base.config
 
+    res =
+      id: if event[conf.events.id] then event[conf.events.id] else i
+      resource_id: if event[conf.events.resource_id] then event[conf.events.resource_id] else 0
+      title: event[conf.events.title]
+      begin: @.date.round(event[conf.events.begin], conf.date.round)
+      event: event
+      url: if event[conf.events.url] then event[conf.events.url] else ""
 
-  roundDate: (date, discrete) ->
-    discrete = switch discrete
-      when '1m' then 60000
-      when '5m' then 300000
-      when '10m' then 600000
-      when '15m' then 900000
-      when '30m' then 1800000
-      else 60000
-    Math.floor(+date / discrete) * discrete
-
-
-  normalizeEvents: (event) ->
-    R = $.RaCalendar.config.events
-    H = $.RaCalendar.handlers
-    event
+    res.end =
+      if conf.events.end && event[conf.events.end]
+        @.date.round(event[conf.events.end], conf.date.round)
+      else if conf.events.duration && event[conf.events.duration]
+        @.date.round(@.date.update(res.begin, event[conf.events.duration]), conf.date.round)
+      else if conf.date.duration
+        @.date.round(@.date.update(res.begin, conf.date.duration), conf.date.round)
+    res
 
   updateEvents: (events) ->
-    events
+    $this = @
+    @.base.events =
+      if events
+        $.map events, (n, i)-> $this.normalizeEvent(n, i)
+      else
+        []
+    console.log @.base.events, events
 
   updateResources: (resources) ->
     resources

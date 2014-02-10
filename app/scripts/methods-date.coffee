@@ -1,4 +1,10 @@
 $.RaCalendar.methods.date =
+  isLeapYear: (year) ->
+    (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
+
+  getDaysInMonth: (year, month) ->
+    [31, (@.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month]
+
   clone: (date) ->
     new Date(date.getTime())
 
@@ -9,25 +15,29 @@ $.RaCalendar.methods.date =
     DateFormat.format.date(date, format)
 
   reformat: (date, format) ->
-    this.format(this.parseDate(date), format)
-
-
-
-  isLeapYear: (year) ->
-    (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
-
-  getDaysInMonth: (year, month) ->
-    [31, (this.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month]
+    @.format(this.parseDate(date), format)
 
   normalize: (date) ->
     if date
-      if typeof date == 'object'
-        date
+      if typeof date == 'number'
+        new Date(date)
+      else if typeof date == 'object'
+        @.clone(date)
       else
-        this.parse(date)
+        @.parse(date)
     else
       $.now()
 
+  round: (date, discrete) ->
+    discrete = switch discrete
+      when '1m' then 60000
+      when '5m' then 300000
+      when '10m' then 600000
+      when '15m' then 900000
+      when '30m' then 1800000
+      else 60000
+    new Date(Math.floor(new Date(date).getTime() / discrete) * discrete)
+
   update: (date, duration) ->
-    new Date(date.setSeconds(duration))
+    @.normalize(date).setSeconds(duration)
 

@@ -15,33 +15,27 @@ $.RaCalendar.methods = {
       }
     });
   },
-  roundDate: function(date, discrete) {
-    discrete = (function() {
-      switch (discrete) {
-        case '1m':
-          return 60000;
-        case '5m':
-          return 300000;
-        case '10m':
-          return 600000;
-        case '15m':
-          return 900000;
-        case '30m':
-          return 1800000;
-        default:
-          return 60000;
-      }
-    })();
-    return Math.floor(+date / discrete) * discrete;
-  },
-  normalizeEvents: function(event) {
-    var H, R;
-    R = $.RaCalendar.config.events;
-    H = $.RaCalendar.handlers;
-    return event;
+  normalizeEvent: function(event, i, a) {
+    var conf, res;
+    conf = this.base.config;
+    res = {
+      id: event[conf.events.id] ? event[conf.events.id] : i,
+      resource_id: event[conf.events.resource_id] ? event[conf.events.resource_id] : 0,
+      title: event[conf.events.title],
+      begin: this.date.round(event[conf.events.begin], conf.date.round),
+      event: event,
+      url: event[conf.events.url] ? event[conf.events.url] : ""
+    };
+    res.end = conf.events.end && event[conf.events.end] ? this.date.round(event[conf.events.end], conf.date.round) : conf.events.duration && event[conf.events.duration] ? this.date.round(this.date.update(res.begin, event[conf.events.duration]), conf.date.round) : conf.date.duration ? this.date.round(this.date.update(res.begin, conf.date.duration), conf.date.round) : void 0;
+    return res;
   },
   updateEvents: function(events) {
-    return events;
+    var $this;
+    $this = this;
+    this.base.events = events ? $.map(events, function(n, i) {
+      return $this.normalizeEvent(n, i);
+    }) : [];
+    return console.log(this.base.events, events);
   },
   updateResources: function(resources) {
     return resources;

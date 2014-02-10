@@ -1,12 +1,12 @@
 $.RaCalendar.template = {
   header: {
-    main: "<div class='rac-header'>header</div>"
+    main: "<div class='ra-header'>header</div>"
   },
   resources: {
-    main: "<div class='rac-resources'>resources</div>"
+    main: "<div class='ra-resources'>resources</div>"
   },
   content: {
-    main: "<div class='rac-content'>content</div>"
+    main: "<div class='ra-content'>content</div>"
   },
   ul: "<ul>{list}</ul>",
   li_link: "<li><a href='{url}'>{title}</a></li>",

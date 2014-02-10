@@ -22,7 +22,7 @@ $ ->
     ,
       id: 2
       channel_id: 1
-      name: "My first event"
+      name: "My second event"
       time: "2014-02-08 19:00:00"
       duration: 3600
     ]

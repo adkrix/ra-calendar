@@ -15,6 +15,7 @@ $.fn.RaCalendar = (settings) ->
     $.extend(true, $TMPL, settings.template) if settings.template
 
     $FUNC = $BASE.methods
+    $BASE.methods.base = $BASE
 
     # custom handlers for parsing and formating of date
     $FUNC.date.parse = settings.parseDate if settings.parseDate
@@ -23,17 +24,9 @@ $.fn.RaCalendar = (settings) ->
 
     $BASE.date = $FUNC.date.normalize(settings.date)
 
-    $BASE.events =
-      if settings.events
-        $FUNC.updateEvents(settings.events)
-      else
-        []
+    $FUNC.updateEvents(settings.events)
 
-    $BASE.resources =
-      if settings.resources
-        $FUNC.updateResources(settings.resources)
-      else
-        []
+    $FUNC.updateResources(settings.resources)
 
     $ELEM.header = $($TMPL.header.main).appendTo($ELEM.root)
     $ELEM.resources = $($TMPL.resources.main).appendTo($ELEM.root)

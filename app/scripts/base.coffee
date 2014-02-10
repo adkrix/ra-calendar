@@ -6,10 +6,11 @@ $.RaCalendar =
     resources: null
     content: null
   config:
-    defaults:
+
+    date:
       begin_time: "09:00:00"
       duration: 3600
-    date_round: '15m'
+      round: '15m'
     events:
       id: "id"
       resource_id: "resource_id"
@@ -17,6 +18,7 @@ $.RaCalendar =
       begin: "begin"
       end: "end"
       duration: ""
+      url: "url"
     resources:
       id: ""
       title: "name"
@@ -25,3 +27,5 @@ $.RaCalendar =
   default_color:
     color: '#000000'
     background: '#eeeeee'
+
+

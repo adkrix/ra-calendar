@@ -13,6 +13,7 @@ $.fn.RaCalendar = function(settings) {
       $.extend(true, $TMPL, settings.template);
     }
     $FUNC = $BASE.methods;
+    $BASE.methods.base = $BASE;
     if (settings.parseDate) {
       $FUNC.date.parse = settings.parseDate;
     }
@@ -20,8 +21,8 @@ $.fn.RaCalendar = function(settings) {
       $FUNC.date.format = settings.formatDate;
     }
     $BASE.date = $FUNC.date.normalize(settings.date);
-    $BASE.events = settings.events ? $FUNC.updateEvents(settings.events) : [];
-    $BASE.resources = settings.resources ? $FUNC.updateResources(settings.resources) : [];
+    $FUNC.updateEvents(settings.events);
+    $FUNC.updateResources(settings.resources);
     $ELEM.header = $($TMPL.header.main).appendTo($ELEM.root);
     $ELEM.resources = $($TMPL.resources.main).appendTo($ELEM.root);
     $ELEM.content = $($TMPL.content.main).appendTo($ELEM.root);

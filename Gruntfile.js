@@ -111,13 +111,13 @@ module.exports = function(grunt) {
     },
 
     watch: {
-      coffee: {
-        files: ['app/*.coffee','app/scripts/*.coffee'],
-        tasks: 'coffee'
-      },
       sass: {
         files: ['app/styles/*'],
         tasks: 'sass'
+      },
+      coffee: {
+        files: ['app/*.coffee','app/scripts/*.coffee'],
+        tasks: ['coffee','concat:variables', 'concat:archive', 'uglify']
       },
       jade: {
         files: ['app/*.jade'],
@@ -126,10 +126,6 @@ module.exports = function(grunt) {
       copy: {
         files: ['app/*.html', 'app/images/*.png'],
         tasks: 'copy'
-      },
-      concat: {
-        files: ['app/scripts/*'],
-        tasks: ['concat:variables', 'concat:archive']
       }
     },
 
@@ -157,7 +153,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-ftp-deploy');
 
-  grunt.registerTask('default', [
+  grunt.registerTask('build', [
     'sass',
     'coffee',
     'concat:variables',
@@ -167,25 +163,18 @@ module.exports = function(grunt) {
     'copy:dist'
   ]);
 
+
+  grunt.registerTask('default', [
+    'build'
+  ]);
+
   grunt.registerTask('server', [
-    'sass',
-    'coffee',
-    'concat:variables',
-    'concat:archive',
-    'uglify',
-    'jade:compile',
-    'copy:dist',
+    'build',
     'watch'
   ]);
 
   grunt.registerTask('deploy', [
-    'sass',
-    'coffee',
-    'concat:variables',
-    'concat:archive',
-    'uglify',
-    'jade:compile',
-    'copy:dist',
+    'build',
     'ftp-deploy'
   ]);
 
