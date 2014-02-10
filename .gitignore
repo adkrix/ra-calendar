@@ -1,5 +1,6 @@
-.DS_Store
 node_modules
+.DS_Store
+.ftppass
 .sass-cache
 .idea/
 *.log

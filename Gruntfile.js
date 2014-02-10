@@ -131,7 +131,20 @@ module.exports = function(grunt) {
         files: ['app/scripts/*'],
         tasks: ['concat:variables', 'concat:archive']
       }
+    },
+
+    'ftp-deploy': {
+      build: {
+        auth: {
+          host: 'jex.ftp.ukraine.com.ua',
+          authKey: 'key1'
+        },
+        src: 'dist/',
+        dest: '/',
+        exclusions: ['dist/**/.DS_Store', 'dist/**/Thumbs.db']
+      }
     }
+
   });
 
   // Load necessary plugins
@@ -142,6 +155,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-ftp-deploy');
 
   grunt.registerTask('default', [
     'sass',
@@ -162,6 +176,17 @@ module.exports = function(grunt) {
     'jade:compile',
     'copy:dist',
     'watch'
+  ]);
+
+  grunt.registerTask('deploy', [
+    'sass',
+    'coffee',
+    'concat:variables',
+    'concat:archive',
+    'uglify',
+    'jade:compile',
+    'copy:dist',
+    'ftp-deploy'
   ]);
 
 };

@@ -143,7 +143,7 @@ $.RaCalendar.template = {
     main: "<div class='rac-resources'>resources</div>"
   },
   content: {
-    main: "<div class='rac-content'>c</div>"
+    main: "<div class='rac-content'>content</div>"
   },
   ul: "<ul>{list}</ul>",
   li_link: "<li><a href='{url}'>{title}</a></li>",
