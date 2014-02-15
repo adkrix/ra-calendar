@@ -39,18 +39,6 @@ $.fn.RaCalendar = (settings) ->
           $FUNC.tmpl($TMPL.li_link, n)
         else
           $FUNC.tmpl($TMPL.li_div, n)
-    $.each $BASE.events, (i, n)->
-      list +=
-        if n.url
-          $FUNC.tmpl($TMPL.li_link, n)
-        else
-          $FUNC.tmpl($TMPL.li_div, n)
-    $.each $BASE.events, (i, n)->
-      list +=
-        if n.url
-          $FUNC.tmpl($TMPL.li_link, n)
-        else
-          $FUNC.tmpl($TMPL.li_div, n)
 
     $ELEM.content.html($FUNC.tmpl($TMPL.ul,{list: list}))
 
