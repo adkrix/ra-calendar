@@ -17,10 +17,20 @@ Start development
 
     grunt server
 
-Update on remote server
+Update on remote server with ftp
 
     grunt deploy
 
+For ftp create `.ftppass` file
+
+    {
+      "host": "my-server",
+      "dest": "/",
+      "key": {
+        "username": "my-user",
+        "password": "my-pass"
+      }
+    }
 
 Start server in console
 
@@ -28,4 +38,4 @@ Start server in console
 
 Open in browser
 
-    127.0.0.1 -p 8080
+    http://127.0.0.1:8080
