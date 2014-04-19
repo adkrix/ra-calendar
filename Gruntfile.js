@@ -2,6 +2,9 @@
 module.exports = function(grunt) {
   'use strict';
 
+  var ftp = grunt.file.readJSON('.ftppass');
+
+
   grunt.initConfig({
     meta: grunt.file.readJSON('package.json'),
     sass: {
@@ -128,19 +131,17 @@ module.exports = function(grunt) {
         tasks: 'copy'
       }
     },
-
     'ftp-deploy': {
       build: {
         auth: {
-          host: 'jex.ftp.ukraine.com.ua',
-          authKey: 'key1'
+          host: ftp.host,
+          authKey: 'key'
         },
         src: 'dist/',
-        dest: '/',
+        dest: ftp.dest,
         exclusions: ['dist/**/.DS_Store', 'dist/**/Thumbs.db']
       }
     }
-
   });
 
   // Load necessary plugins
