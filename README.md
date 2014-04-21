@@ -39,3 +39,22 @@ Start server in console
 Open in browser
 
     http://127.0.0.1:8080
+
+
+Gulp
+----
+
+Install project
+
+    cd <work-path>/ra-calendar
+    bundle install
+    npm install -g gulp
+    npm install
+
+Build distribution in dist/ directory
+
+    gulp
+
+Start development
+
+    gulp server
