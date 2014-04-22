@@ -1,4 +1,5 @@
 var
+  open = require('open'),
   pkg = require('./package.json'),
   gulp = require('gulp'),
   gutil = require('gulp-util'),
@@ -9,98 +10,106 @@ var
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
   clean = require('gulp-clean'),
-
   connect = require('gulp-connect')
-  livereload = require('gulp-livereload'),
   ftp = require('gulp-ftp');
 
 var path = {
-  distrib: './dist',
-  script_name: 'jquery.' + pkg.name + '.js',
-  script_name_min: 'jquery.' + pkg.name + '.min.js',
+  names: ['base', 'methods', 'methods-date', 'templates', 'init'],
+  output_name: 'jquery.' + pkg.name + '.js',
+  output_name_min: 'jquery.' + pkg.name + '.min.js',
+  dist_main: './dist/',
+  dist_scripts: './dist/scripts/',
+  dist_lib: './dist/scripts/lib/',
+  dist_style: './dist/styles/',
   jade: ['./app/*.jade'],
-  sass: ['./app/styles/*.sass','!./app/styles/_*.sass'],
-  sass_dest: './dist/styles/',
-  coffee: [
-    {src: './app/scripts/*.coffee', dest: './dist/scripts/lib/'},
-    {src: './app/*.coffee', dest: './dist/'}
-  ],
-  scripts: [
-    './dist/scripts/lib/base.js',
-    './dist/scripts/lib/methods.js',
-    './dist/scripts/lib/methods-date.js',
-    './dist/scripts/lib/templates.js',
-    './dist/scripts/lib/init.js'
-  ]
+  sass: ['./app/styles/*.sass', '!./app/styles/_*.sass'],
+  coffee: function(){
+    return this.names.map(function(element){
+      return './app/scripts/' + element + '.coffee'
+    });
+  },
+  example: ['./app/*.coffee'],
+  assets: ['./app/vendor/**/*.*', './app/images/**/*.*']
 }
 
 gulp.task('jade', function() {
   gulp.src(path.jade)
-    .pipe(jade({pretty: true}))
-    .on('error', gutil.log)
-    .pipe(gulp.dest(path.distrib));
+    .pipe(jade({pretty: true}).on('error', gutil.log))
+    .pipe(gulp.dest(path.dist_main))
+    .pipe(connect.reload());
 });
 
 gulp.task('sass', function () {
   gulp.src(path.sass)
-    .pipe(sass({compass: true}))
-    .pipe(gulp.dest(path.sass_dest));
+    .pipe(sass({compass: true}).on('error', gutil.log))
+    .pipe(gulp.dest(path.dist_style))
+    .pipe(connect.reload());
+});
+
+gulp.task('example', function() {
+  gulp.src(path.example)
+    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(gulp.dest(path.dist_main))
+    .pipe(connect.reload());
 });
 
 gulp.task('coffee', function() {
-  var coffee_process = function(block){
-    gulp.src(block.src)
-      .pipe(coffee({bare: true}).on('error', gutil.log))
-      .pipe(gulp.dest(block.dest))
-  }
-  path.coffee.forEach(coffee_process)
+  gulp.src(path.coffee())
+    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(gulp.dest(path.dist_scripts))
+    .pipe(concat(path.output_name))
+    .pipe(gulp.dest(path.dist_main))
+    .pipe(rename(path.output_name_min))
+    .pipe(uglify())
+    .pipe(gulp.dest(path.dist_main))
+    .pipe(connect.reload());
 });
 
-gulp.task('build_js', function() {
-  gulp.src(path.scripts)
-    .pipe(concat(path.script_name))
-    .pipe(gulp.dest(path.distrib))
-    .pipe(rename(path.script_name_min))
-    .pipe(uglify())
-    .pipe(gulp.dest(path.distrib));
+gulp.task('assets', function() {
+  gulp.src(path.assets, {base: './app/'})
+    .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('clean', function() {
-  gulp.src(path.distrib, {read: false})
+  gulp.src(path.dist_main + '*', {read: false})
     .pipe(clean());
 });
 
-//gulp.task('http-server', function() {
-//  connect()
-//    .use(livereload())
-//    .use(connect.static(path.distrib))
-//    .listen('9000');
-//  console.log('Server listening on http://localhost:9000');
-//});
+gulp.task('connect', function() {
+  connect.server({
+    host: '127.0.0.1',
+    root: path.dist_main,
+    livereload: true,
+    middleware: function(connect, opt) {
+      setTimeout(function(){
+        open('http://' + opt.host + ':' + opt.port + '/');
+      },1000);
+      return [];
+    }
+  });
+});
 
-gulp.task('build_all', [
-  //'clean',
+gulp.task('build', [
+  'clean',
   'jade',
   'sass',
   'coffee',
-  'build_js'
+  'example',
+  'assets'
 ]);
 
 gulp.task('watch',function(){
   gulp.watch(path.jade, ['jade']);
   gulp.watch(path.sass, ['sass']);
+  gulp.watch(path.coffee(), ['coffee']);
+  gulp.watch(path.example, ['example']);
 
-  // Watch Coffee Files
-  var sources = path.coffee.map(function(element){
-    return element.src;
-  });
-  gulp.watch(sources, ['coffee', 'build_js']);
 });
 
 // Hi-level tasks
 
 // Default
-gulp.task('default', ['build_all']);
+gulp.task('default', ['build']);
 
 // Server
-gulp.task('server', ['build_all', 'watch']);
+gulp.task('server', ['build', 'connect', 'watch']);
