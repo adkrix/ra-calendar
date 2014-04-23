@@ -70,7 +70,7 @@ gulp.task('assets', function() {
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('clean', function() {
+gulp.task('clean', function(cb) {
   gulp.src(path.dist_main + '*', {read: false})
     .pipe(clean());
 });
@@ -78,24 +78,25 @@ gulp.task('clean', function() {
 gulp.task('connect', function() {
   connect.server({
     host: '127.0.0.1',
+    port: 9000,
     root: path.dist_main,
     livereload: true,
     middleware: function(connect, opt) {
       setTimeout(function(){
         open('http://' + opt.host + ':' + opt.port + '/');
-      },1000);
+      },2000);
       return [];
     }
   });
+
 });
 
 gulp.task('build', [
-  'clean',
+  'assets',
   'jade',
   'sass',
   'coffee',
-  'example',
-  'assets'
+  'example'
 ]);
 
 gulp.task('watch',function(){
@@ -109,7 +110,15 @@ gulp.task('watch',function(){
 // Hi-level tasks
 
 // Default
-gulp.task('default', ['build']);
+gulp.task('default', [
+  //'clean',
+  'build'
+]);
 
 // Server
-gulp.task('server', ['build', 'connect', 'watch']);
+gulp.task('server', [
+  //'clean',
+  'build',
+  'connect',
+  'watch'
+]);
