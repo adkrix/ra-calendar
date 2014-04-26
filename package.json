@@ -4,16 +4,18 @@
   "author": "Arthur Creek <arthur.creek@gmail.com>",
   "dependencies": {},
   "devDependencies": {
-    "http-server": "~0.6.1",
-    "grunt": "~0.4.1",
-    "grunt-contrib-sass": "~0.7.2",
-    "grunt-contrib-coffee": "~0.9.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-uglify": "~0.3.2",
-    "grunt-contrib-jade": "~0.9.1",
-    "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-watch": "~0.5.2",
-    "grunt-ftp-deploy": "0.1.1"
+    "open": "0.0.5",
+    "gulp": "~3.6.1",
+    "gulp-util": "~2.2.14",
+    "gulp-jade": "~0.5.0",
+    "gulp-ruby-sass": "~0.4.3",
+    "gulp-coffee": "~1.4.2",
+    "gulp-concat": "~2.2.0",
+    "gulp-uglify": "~0.2.1",
+    "gulp-rename": "~1.2.0",
+    "gulp-clean": "~0.2.4",
+    "gulp-connect": "~2.0.5",
+    "gulp-ftp": "~0.2.1"
   },
   "engines": {
     "node": ">=0.4.1"

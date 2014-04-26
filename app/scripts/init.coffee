@@ -41,6 +41,7 @@ $.fn.RaCalendar = (settings) ->
           $FUNC.tmpl($TMPL.li_div, n)
 
     $ELEM.content.html($FUNC.tmpl($TMPL.ul,{list: list}))
+    console.log(1212)
 
 
 

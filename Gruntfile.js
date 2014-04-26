@@ -141,6 +141,21 @@ module.exports = function(grunt) {
         dest: ftp.dest,
         exclusions: ['dist/**/.DS_Store', 'dist/**/Thumbs.db']
       }
+    },
+    run: {
+      options: {
+        // Task-specific options go here.
+      },
+      server: {
+        args: [
+          './node_modules/http-server/bin/http-server',
+          './dist/',
+          '-a',
+          '127.0.0.1',
+          '-p',
+          '8080'
+        ]
+      }
     }
   });
 
@@ -153,6 +168,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-ftp-deploy');
+  grunt.loadNpmTasks('grunt-run');
 
   grunt.registerTask('build', [
     'sass',
@@ -171,6 +187,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('server', [
     'build',
+    'run',
     'watch'
   ]);
 

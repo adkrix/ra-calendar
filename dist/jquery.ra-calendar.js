@@ -1,14 +1,5 @@
-/*
-  file: jquery.ra-calendar.js
-  version: 0.0.1 
- */
-$(function() {
-'use strict';
-
-
-// Source: dist/scripts/lib/base.js
 $.RaCalendar = {
-  version: '0.0.1',
+  version: '<%= meta.version %>',
   elements: {
     root: null,
     header: null,
@@ -42,8 +33,7 @@ $.RaCalendar = {
     background: '#eeeeee'
   }
 };
-;;
-// Source: dist/scripts/lib/methods.js
+
 $.RaCalendar.methods = {
   tmpl: function(template, data) {
     return template.replace(/\{([\w\.]*)\}/g, function(str, key) {
@@ -87,8 +77,7 @@ $.RaCalendar.methods = {
     return resources;
   }
 };
-;;
-// Source: dist/scripts/lib/methods-date.js
+
 $.RaCalendar.methods.date = {
   isLeapYear: function(year) {
     return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
@@ -149,8 +138,7 @@ $.RaCalendar.methods.date = {
     return this.normalize(date).setSeconds(duration);
   }
 };
-;;
-// Source: dist/scripts/lib/templates.js
+
 $.RaCalendar.template = {
   header: {
     main: "<div class='ra-header'>header</div>"
@@ -165,8 +153,7 @@ $.RaCalendar.template = {
   li_link: "<li><a href='{url}'>{title}</a></li>",
   li_div: "<li><div>{title}</div> </li>"
 };
-;;
-// Source: dist/scripts/lib/init.js
+
 $.fn.RaCalendar = function(settings) {
   return $(this).each(function() {
     var $BASE, $CONF, $ELEM, $FUNC, $TMPL, list;
@@ -199,10 +186,9 @@ $.fn.RaCalendar = function(settings) {
     $.each($BASE.events, function(i, n) {
       return list += n.url ? $FUNC.tmpl($TMPL.li_link, n) : $FUNC.tmpl($TMPL.li_div, n);
     });
-    return $ELEM.content.html($FUNC.tmpl($TMPL.ul, {
+    $ELEM.content.html($FUNC.tmpl($TMPL.ul, {
       list: list
     }));
+    return console.log(1212);
   });
 };
-
-});

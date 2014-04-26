@@ -30,8 +30,9 @@ $.fn.RaCalendar = function(settings) {
     $.each($BASE.events, function(i, n) {
       return list += n.url ? $FUNC.tmpl($TMPL.li_link, n) : $FUNC.tmpl($TMPL.li_div, n);
     });
-    return $ELEM.content.html($FUNC.tmpl($TMPL.ul, {
+    $ELEM.content.html($FUNC.tmpl($TMPL.ul, {
       list: list
     }));
+    return console.log(1212);
   });
 };

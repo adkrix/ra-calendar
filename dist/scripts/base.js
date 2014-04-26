@@ -1,5 +1,5 @@
 $.RaCalendar = {
-  version: '0.0.1',
+  version: '<%= meta.version %>',
   elements: {
     root: null,
     header: null,
